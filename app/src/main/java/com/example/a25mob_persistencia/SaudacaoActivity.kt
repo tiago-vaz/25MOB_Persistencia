@@ -13,11 +13,14 @@ class SaudacaoActivity : AppCompatActivity() {
 
         var lbSaudacao = findViewById<TextView>(R.id.lbSaudacao)
 
+        //Recupera o SharedPrefences e armazena os valores nas variáveis nome e tratamento
         val saudacaoPersistencia = this.getSharedPreferences("saudacao", Context.MODE_PRIVATE)
-
         val nome = saudacaoPersistencia.getString("nome", "")
         val tratamento = saudacaoPersistencia.getString("tratamento", "")
 
+        //Verifica se há tratamento atribuido
+        //Caso seja "Sem Tratamento", exibe somente o nome
+        //Outros casos, exibe tratamento e nome
         if(tratamento.equals("Sem Tratamento")){
             lbSaudacao.text = nome
         }

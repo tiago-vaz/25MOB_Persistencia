@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import java.io.FileNotFoundException
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +23,8 @@ class MainActivity : AppCompatActivity() {
         var listTratamento = findViewById<Spinner>(R.id.listTratamento)
 
         btnSalvar.setOnClickListener{
-            val saudacaoPersistencia = this.getSharedPreferences("saudacao", Context.MODE_PRIVATE)
-            val editor = saudacaoPersistencia.edit()
-
-            editor.putString("nome", txtNome.text.toString())
-            editor.putString("tratamento", listTratamento.selectedItem.toString())
-            editor.apply()
+            val data = txtNome.text.toString() + ":" + listTratamento.selectedItem.toString()
+            gravaDadoArquivo("saudacao",data)
 
             Toast.makeText(this, "Salvo com Sucesso", Toast.LENGTH_SHORT).show()
         }
@@ -35,8 +34,17 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
 
-
+    private fun gravaDadoArquivo(filename: String, data: String) {
+        try{
+            val fs = openFileOutput(filename, Context.MODE_PRIVATE)
+            fs.write(data.toByteArray())
+            fs.close()
+        }
+        catch (e: FileNotFoundException){
+            Log.i("gravaDadoArquivo", "FileNotFoundException")}
+        catch (e: IOException){Log.i("gravaDadoArquivo", "IOException")}
 
     }
 }

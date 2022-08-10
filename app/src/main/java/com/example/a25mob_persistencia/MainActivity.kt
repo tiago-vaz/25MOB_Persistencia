@@ -17,34 +17,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Instanciando objetos da activity para utilização mais adiante
         var btnSalvar = findViewById<Button>(R.id.btnSalvar)
         var btnSaudacao = findViewById<Button>(R.id.btnSaudacao)
         var txtNome = findViewById<TextView>(R.id.txtNome)
         var listTratamento = findViewById<Spinner>(R.id.listTratamento)
 
-        btnSalvar.setOnClickListener{
-            val data = txtNome.text.toString() + ":" + listTratamento.selectedItem.toString()
-            gravaDadoArquivo("saudacao",data)
 
+        //Instanciando o DatabaseManager
+        val db = DatabaseManager(this, "saudacoes")
+
+        btnSalvar.setOnClickListener{
+
+            //Limpa saudação anterior antes de criar uma nova no banco de dados
+            db.removeSaudacao()
+            //Cria uma nova saudação no banco de dados com base no nome e tratamento fornecidos pelo usuário
+            db.insereSaudacao(1,txtNome.text.toString(), listTratamento.selectedItem.toString())
+
+            //Exibe um Toast informando que a saudação foi salva com sucesso
             Toast.makeText(this, "Salvo com Sucesso", Toast.LENGTH_SHORT).show()
         }
 
         btnSaudacao.setOnClickListener{
+            // Realiza a chamada para a tela que exibe a saudação
             val intent = Intent(this, SaudacaoActivity::class.java)
             startActivity(intent)
         }
 
     }
 
-    private fun gravaDadoArquivo(filename: String, data: String) {
-        try{
-            val fs = openFileOutput(filename, Context.MODE_PRIVATE)
-            fs.write(data.toByteArray())
-            fs.close()
-        }
-        catch (e: FileNotFoundException){
-            Log.i("gravaDadoArquivo", "FileNotFoundException")}
-        catch (e: IOException){Log.i("gravaDadoArquivo", "IOException")}
-
-    }
 }

@@ -17,25 +17,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Instanciando objetos da activity para utilização mais adiante
         var btnSalvar = findViewById<Button>(R.id.btnSalvar)
         var btnSaudacao = findViewById<Button>(R.id.btnSaudacao)
         var txtNome = findViewById<TextView>(R.id.txtNome)
         var listTratamento = findViewById<Spinner>(R.id.listTratamento)
 
         btnSalvar.setOnClickListener{
+            // Agrupa o nome e o tratamento utilizando separador de ":" e executa a gravação no arquivo através da função gravaDadoArquivo
             val data = txtNome.text.toString() + ":" + listTratamento.selectedItem.toString()
             gravaDadoArquivo("saudacao",data)
 
+            //Exibe um Toast informando que a saudação foi salva com sucesso
             Toast.makeText(this, "Salvo com Sucesso", Toast.LENGTH_SHORT).show()
         }
 
         btnSaudacao.setOnClickListener{
+            // Realiza a chamada para a tela que exibe a saudação
             val intent = Intent(this, SaudacaoActivity::class.java)
             startActivity(intent)
         }
 
     }
 
+    //Função utilitária para realizar a gravação dos dados fornecidos em arquivo
     private fun gravaDadoArquivo(filename: String, data: String) {
         try{
             val fs = openFileOutput(filename, Context.MODE_PRIVATE)

@@ -15,11 +15,20 @@ class SaudacaoActivity : AppCompatActivity() {
 
         var lbSaudacao = findViewById<TextView>(R.id.lbSaudacao)
 
+        //Realiza chamada à função recuperaDadoArquivo, que faz a leitura no arquivo
         val data = recuperaDadoArquivo("saudacao")
+
+        //Faz a separação dos dados do arquivo recuperado que estão delimitados por :
         val tokenizer = StringTokenizer(data,":")
+
+        // Recupera o valor do primeiro elemento e atribui na variável nome. Caso esteja vazio, seta como "Sem Nome"
         val nome = if (tokenizer.hasMoreTokens()) tokenizer.nextToken() else "Sem Nome"
+        // Recupera o valor do primeiro elemento e atribui na variável tratamento. Caso esteja vazio, seta como "Sem Tratamento"
         val tratamento = if (tokenizer.hasMoreTokens()) tokenizer.nextToken() else "Sem Tratamento"
 
+        //Verifica se há tratamento atribuido
+        //Caso seja "Sem Tratamento", exibe somente o nome
+        //Outros casos, exibe tratamento e nome
         if(tratamento.equals("Sem Tratamento")){
             lbSaudacao.text = nome
         }
@@ -28,6 +37,7 @@ class SaudacaoActivity : AppCompatActivity() {
         }
     }
 
+    //Função utilitária para recuperar os dados em arquivo
     private fun recuperaDadoArquivo(filename: String): String {
         try {
             val fi = openFileInput(filename)
